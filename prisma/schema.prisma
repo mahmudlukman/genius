@@ -1,0 +1,19 @@
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id String @id @unique //matches kinde user id
+  email String @unique 
+
+  paystackCustomerId String? @unique @map(name: "paystack_customer_id")
+  paystackSubscriptionId String? @unique @map(name: "paystack_subscription_id")
+  paystackPriceId String? @unique @map(name: "paystack_price_id")
+  paystackCurrentPeriodEnd String? @unique @map(name: "paystack_current_period_id")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
