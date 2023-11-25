@@ -41,21 +41,35 @@ export const appRouter = router({
     });
   }),
 
+  getFileUploadStatus: privateProcedure
+    .input(z.object({ fileId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const file = await db.file.findFirst({
+        where: {
+          id: input.fileId,
+          userId: ctx.userId,
+        },
+      });
+      if (!file) return { status: 'PENDING' as const };
+
+      return { status: file.uploadStatus };
+    }),
+
   getFile: privateProcedure
     .input(z.object({ key: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { userId } = ctx
+      const { userId } = ctx;
 
       const file = await db.file.findFirst({
         where: {
           key: input.key,
           userId,
         },
-      })
+      });
 
-      if (!file) throw new TRPCError({ code: 'NOT_FOUND' })
+      if (!file) throw new TRPCError({ code: 'NOT_FOUND' });
 
-      return file
+      return file;
     }),
 
   deleteFile: privateProcedure
