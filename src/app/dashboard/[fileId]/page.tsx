@@ -16,7 +16,7 @@ const Page = async ({ params }: PageProps) => {
 
   // get user
   const { getUser } = getKindeServerSession();
-  const user = await getUser();
+  const user = getUser();
 
   if (!user || !user.id) redirect(`/auth-callback?origin=dashboard/${fileId}`);
 
